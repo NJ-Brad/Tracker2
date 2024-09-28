@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>BOOK03.ICO</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BrowserWrapper.cs" />
+    <Compile Remove="BrowserWrapper.Designer.cs" />
+    <Compile Remove="PrintForm.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="BrowserWrapper.resx" />
+    <EmbeddedResource Remove="PrintForm.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="BOOK03.ICO" />
+  </ItemGroup>
+
+</Project>
