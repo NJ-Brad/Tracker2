@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             dataGridView1 = new DataGridView();
             MeetingCol = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             menuStrip1 = new MenuStrip();
@@ -58,12 +57,14 @@
             // 
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { MeetingCol, Column4, Column1, Column2 });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { MeetingCol, Column1, Column2 });
             dataGridView1.Location = new Point(13, 31);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(1275, 655);
             dataGridView1.TabIndex = 5;
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            dataGridView1.CellMouseDown += dataGridView1_CellMouseDown;
             dataGridView1.DefaultValuesNeeded += dataGridView1_DefaultValuesNeeded;
             dataGridView1.RowStateChanged += dataGridView1_RowStateChanged;
             // 
@@ -75,23 +76,14 @@
             MeetingCol.Name = "MeetingCol";
             MeetingCol.Width = 125;
             // 
-            // Column4
-            // 
-            Column4.DataPropertyName = "WhenCreated";
-            Column4.HeaderText = "When Created";
-            Column4.MinimumWidth = 6;
-            Column4.Name = "Column4";
-            Column4.ReadOnly = true;
-            Column4.Width = 125;
-            // 
             // Column1
             // 
-            Column1.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             Column1.DataPropertyName = "Tag";
-            Column1.HeaderText = "Cues";
+            Column1.HeaderText = "Tags";
             Column1.MinimumWidth = 6;
             Column1.Name = "Column1";
-            Column1.Width = 200;
+            Column1.ReadOnly = true;
+            Column1.Width = 125;
             // 
             // Column2
             // 
@@ -255,7 +247,6 @@
         private ToolStripMenuItem noRecentItemsToolStripMenuItem;
         private RecentFilesManager recentFilesManager1;
         private DataGridViewTextBoxColumn MeetingCol;
-        private DataGridViewTextBoxColumn Column4;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
     }

@@ -147,7 +147,7 @@ namespace Tracker
 
         private void dataGridView1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine(e.Row.State.ToString());
+            //System.Diagnostics.Debug.WriteLine(e.Row.State.ToString());
         }
 
         string previousMeeting = "New Meeting";
@@ -158,6 +158,53 @@ namespace Tracker
                 previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString() ?? "New Meeting";
             }
             e.Row.Cells["MeetingCol"].Value = previousMeeting;
+        }
+
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (e.ColumnIndex == 1)
+                {
+                    if (e.RowIndex != -1)
+                    {
+                        TrackedItemModel tim = dataGridView1.Rows[e.RowIndex].DataBoundItem as TrackedItemModel;
+
+                        NoteDetailsForm ndf = new NoteDetailsForm();
+
+                        ndf.Data = new TrackedItemModel(tim);
+
+                        if (ndf.ShowDialog() == DialogResult.OK)
+                        {
+                            //dataGridView1.Rows[e.RowIndex].SetValues(ndf.Data);
+                            tim.CopyFrom(ndf.Data);
+
+                            dataGridView1.Refresh();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex != -1)
+            {
+                TrackedItemModel tim = dataGridView1.Rows[e.RowIndex].DataBoundItem as TrackedItemModel;
+
+                NoteDetailsForm ndf = new NoteDetailsForm();
+
+                ndf.Data = new TrackedItemModel(tim);
+
+                if (ndf.ShowDialog() == DialogResult.OK)
+                {
+                    //dataGridView1.Rows[e.RowIndex].SetValues(ndf.Data);
+                    tim.CopyFrom(ndf.Data);
+
+                    dataGridView1.Refresh();
+                }
+            }
         }
     }
 }
