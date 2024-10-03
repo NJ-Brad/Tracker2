@@ -2,11 +2,11 @@
 {
     public class TrackedItemModel
     {
-        public string Meeting { get; set; } = "";
-        public DateTime? WhenCreated { get; set; } = DateTime.Now;
-        public string Text { get; set; } = "";
-        public string Tag { get; set; } = "";
-        public string FollowUp { get; set; } = "";
+        public string? Meeting { get; set; } = "";
+        public DateTime WhenCreated { get; set; } = DateTime.Now;
+        public string? Text { get; set; } = "";
+        public string? Tag { get; set; } = "";
+        public string? FollowUp { get; set; } = "";
         public DateTime? WhenCompleted { get; set; } = null;
 
         public TrackedItemModel() { }

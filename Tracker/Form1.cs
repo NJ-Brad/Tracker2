@@ -150,12 +150,20 @@ namespace Tracker
             //System.Diagnostics.Debug.WriteLine(e.Row.State.ToString());
         }
 
-        string previousMeeting = "New Meeting";
+        string? previousMeeting = "New Meeting";
         private void dataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             if (e.Row.Index > 0)
             {
-                previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString() ?? "New Meeting";
+                //previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString() ?? "New Meeting";
+                if (dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value == null)
+                {
+                    previousMeeting = "";
+                }
+                else
+                {
+                    previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString();
+                }
             }
             e.Row.Cells["MeetingCol"].Value = previousMeeting;
         }
