@@ -290,6 +290,7 @@
             flagSelectionControl1.Name = "flagSelectionControl1";
             flagSelectionControl1.Size = new Size(467, 45);
             flagSelectionControl1.TabIndex = 27;
+            flagSelectionControl1.FlagChanged += flagSelectionControl1_FlagChanged;
             // 
             // NoteDetailsForm
             // 

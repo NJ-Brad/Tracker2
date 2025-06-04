@@ -50,6 +50,7 @@
             columnHeaderMeeting = new ColumnHeader();
             columnHeaderComment = new ColumnHeader();
             imageList1 = new ImageList(components);
+            imageList2 = new ImageList(components);
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -173,6 +174,7 @@
             listView2.Dock = DockStyle.Fill;
             listView2.FullRowSelect = true;
             listView2.Location = new Point(0, 33);
+            listView2.MultiSelect = false;
             listView2.Name = "listView2";
             listView2.OwnerDraw = true;
             listView2.Size = new Size(1300, 665);
@@ -205,6 +207,15 @@
             imageList1.TransparentColor = Color.Transparent;
             imageList1.Images.SetKeyName(0, "Open.bmp");
             imageList1.Images.SetKeyName(1, "Closed.bmp");
+            // 
+            // imageList2
+            // 
+            imageList2.ColorDepth = ColorDepth.Depth32Bit;
+            imageList2.ImageStream = (ImageListStreamer)resources.GetObject("imageList2.ImageStream");
+            imageList2.TransparentColor = Color.Transparent;
+            imageList2.Images.SetKeyName(0, "Idea.bmp");
+            imageList2.Images.SetKeyName(1, "ArrowRight.bmp");
+            imageList2.Images.SetKeyName(2, "ArrowLeft.bmp");
             // 
             // Form1
             // 
@@ -246,5 +257,6 @@
         private ColumnHeader columnHeaderMeeting;
         private ColumnHeader columnHeaderComment;
         private ImageList imageList1;
+        private ImageList imageList2;
     }
 }

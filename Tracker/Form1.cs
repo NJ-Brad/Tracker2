@@ -239,6 +239,60 @@ namespace Tracker
 
                 e.Graphics.DrawString(e.Item.Text, listView2.Font, SystemBrushes.ActiveCaptionText, bounds);
             }
+            else if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel trackedItem)
+            {
+                Rectangle cellBounds = e.Bounds;
+                cellBounds.Width = listView2.Columns[0].Width;
+
+
+                //if ((e.State & ListViewItemStates.Selected) != 0)
+                if (e.Item.Selected)
+                {
+                    // Draw the background and focus rectangle for a selected item.
+                    //e.Graphics.FillRectangle(Brushes.Maroon, e.Bounds);
+                    //                    using (Brush brush = SolidBrush()
+
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, cellBounds);
+                    e.DrawFocusRectangle();
+                }
+                else
+                {
+                    using (Brush brush = new SolidBrush(BackColor))
+                    {
+                        e.Graphics.FillRectangle(brush, cellBounds);
+                    }
+                    //// Draw the background for an unselected item.
+                    //using (LinearGradientBrush brush =
+                    //    new LinearGradientBrush(e.Bounds, Color.Orange,
+                    //    Color.Maroon, LinearGradientMode.Horizontal))
+                    //{
+                    //    e.Graphics.FillRectangle(brush, e.Bounds);
+                    //}
+                }
+
+                if (cellBounds.Width > 20) // Prevent drawing if the width is too small
+                {
+                    int middle = cellBounds.X + cellBounds.Width / 2;
+                    int start = middle - 8;
+                    cellBounds.X = start;
+                }
+                switch (trackedItem.Flag)
+                {
+                    case "Idea":
+                        //                        e.Graphics.DrawImage(imageList2.Images[0], bounds.X, bounds.Y + 4, 16, 16);
+                        e.Graphics.DrawImage(imageList2.Images[0], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        break;
+                    case "I_Owe":
+                        e.Graphics.DrawImage(imageList2.Images[1], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        break;
+                    case "They_Owe":
+                        e.Graphics.DrawImage(imageList2.Images[2], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        break;
+                        //default:
+                        //    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
+                        //    break;
+                }
+            }
             else
                 e.DrawDefault = true;
 
@@ -246,10 +300,16 @@ namespace Tracker
 
         private void listView2_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-            if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel tim)
+            if (e.ColumnIndex == 0) // Draw the first column (Heading or TrackedItemModel)
             {
-                e.DrawDefault = true;
+                return;
             }
+            e.DrawDefault = true;
+
+            //if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel tim)
+            //{
+            //    e.DrawDefault = true;
+            //}
 
             //if (headings["a"].IsExpanded)
             //    e.DrawDefault = true;

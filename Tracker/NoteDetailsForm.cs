@@ -90,5 +90,43 @@ namespace Tracker
                 textBoxTags.DataBindings[0].ReadValue();
             }
         }
+
+        private void flagSelectionControl1_FlagChanged(object sender, Tracker.FlagSelectionControl.FlagChangedEventArgs e)
+        {
+            switch (e.FlagValue)
+            {
+                case "None":
+                    break;
+                case "Idea":
+                    if (!string.IsNullOrEmpty(Data.Tag))
+                    {
+                        Data.Tag += $" ";
+                    }
+                    Data.Tag = $"Idea";
+                    textBoxTags.DataBindings[0].ReadValue();
+                    break;
+                case "I_Owe":
+                    ToFromForm tff = new ToFromForm();
+                    tff.To = true;
+                    if (tff.ShowDialog() == DialogResult.OK)
+                    {
+                        Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
+                        textBoxTags.DataBindings[0].ReadValue();
+                    }
+                    break;
+                case "They_Owe":
+                    ToFromForm tff2 = new ToFromForm();
+                    tff2.To = false;
+                    if (tff2.ShowDialog() == DialogResult.OK)
+                    {
+                        Data.Tag = $"I expect this from {tff2.Person} by {tff2.By}";
+                        textBoxTags.DataBindings[0].ReadValue();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
 }
