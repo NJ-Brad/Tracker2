@@ -39,11 +39,14 @@
             radioButtonIdea.Appearance = Appearance.Button;
             radioButtonIdea.AutoSize = true;
             radioButtonIdea.CausesValidation = false;
+            radioButtonIdea.Image = Properties.Resources.Idea;
+            radioButtonIdea.ImageAlign = ContentAlignment.MiddleLeft;
             radioButtonIdea.Location = new Point(74, 3);
             radioButtonIdea.Name = "radioButtonIdea";
-            radioButtonIdea.Size = new Size(56, 35);
+            radioButtonIdea.Size = new Size(72, 35);
             radioButtonIdea.TabIndex = 30;
             radioButtonIdea.Text = "Idea";
+            radioButtonIdea.TextImageRelation = TextImageRelation.ImageBeforeText;
             radioButtonIdea.UseVisualStyleBackColor = true;
             radioButtonIdea.Click += SelectionChanged;
             // 
@@ -65,11 +68,13 @@
             radioButtonIOwe.Appearance = Appearance.Button;
             radioButtonIOwe.AutoSize = true;
             radioButtonIOwe.CausesValidation = false;
-            radioButtonIOwe.Location = new Point(136, 3);
+            radioButtonIOwe.Image = Properties.Resources.ArrowRight;
+            radioButtonIOwe.Location = new Point(152, 3);
             radioButtonIOwe.Name = "radioButtonIOwe";
-            radioButtonIOwe.Size = new Size(68, 35);
+            radioButtonIOwe.Size = new Size(84, 35);
             radioButtonIOwe.TabIndex = 31;
             radioButtonIOwe.Text = "I Owe";
+            radioButtonIOwe.TextImageRelation = TextImageRelation.ImageBeforeText;
             radioButtonIOwe.UseVisualStyleBackColor = true;
             radioButtonIOwe.Click += SelectionChanged;
             // 
@@ -78,11 +83,13 @@
             radioButtonTheyOwe.Appearance = Appearance.Button;
             radioButtonTheyOwe.AutoSize = true;
             radioButtonTheyOwe.CausesValidation = false;
-            radioButtonTheyOwe.Location = new Point(210, 3);
+            radioButtonTheyOwe.Image = Properties.Resources.ArrowLeft;
+            radioButtonTheyOwe.Location = new Point(242, 3);
             radioButtonTheyOwe.Name = "radioButtonTheyOwe";
-            radioButtonTheyOwe.Size = new Size(100, 35);
+            radioButtonTheyOwe.Size = new Size(116, 35);
             radioButtonTheyOwe.TabIndex = 32;
             radioButtonTheyOwe.Text = "They Owe";
+            radioButtonTheyOwe.TextImageRelation = TextImageRelation.ImageBeforeText;
             radioButtonTheyOwe.UseVisualStyleBackColor = true;
             radioButtonTheyOwe.Click += SelectionChanged;
             // 
