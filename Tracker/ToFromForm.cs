@@ -1,4 +1,6 @@
-﻿namespace Tracker
+﻿using System.ComponentModel;
+
+namespace Tracker
 {
     public partial class ToFromForm : Form
     {
@@ -7,8 +9,11 @@
             InitializeComponent();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool To { get; set; } = true;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string Person { get; set; } = "";
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string By { get; set; } = "";
 
         protected override void OnShown(EventArgs e)

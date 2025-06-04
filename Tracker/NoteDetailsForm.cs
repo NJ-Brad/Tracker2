@@ -1,4 +1,5 @@
-﻿using Tracker.Models;
+﻿using System.ComponentModel;
+using Tracker.Models;
 
 namespace Tracker
 {
@@ -9,19 +10,39 @@ namespace Tracker
             InitializeComponent();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TrackedItemModel Data { get; set; }
+
+        private BindingSource dataSource = new BindingSource();
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool CreatingNew { get; set; } = false;
+
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
-            textBox1.DataBindings.Add("Text", Data, nameof(Data.Text));
-            textBox2.DataBindings.Add("Text", Data, nameof(Data.Tag));
-            textBox3.DataBindings.Add("Text", Data, nameof(Data.FollowUp));
-            textBox4.DataBindings.Add("Text", Data, nameof(Data.WhenCompleted));
+            dataSource.DataSource = Data;
+            textBoxID.DataBindings.Add("Text", dataSource, nameof(Data.Id));
+            textBoxTeam.DataBindings.Add("Text", dataSource, nameof(Data.Team));
+            textBoxMeeting.DataBindings.Add("Text", dataSource, nameof(Data.Meeting));
+            textBoxCreated.DataBindings.Add("Text", dataSource, nameof(Data.WhenCreated));
+
+            textBoxNoteText.DataBindings.Add("Text", dataSource, nameof(Data.Text));
+            textBoxTags.DataBindings.Add("Text", dataSource, nameof(Data.Tag));
+            textBoxFollowUp.DataBindings.Add("Text", dataSource, nameof(Data.FollowUp));
+            textBoxCompleted.DataBindings.Add("Text", dataSource, nameof(Data.WhenCompleted));
+
+            flagSelectionControl1.DataBindings.Add("FlagValue", dataSource, nameof(Data.Flag));
+            //flagSelectionControl1.FlagValue = Data.Flag ?? "None";
+
+            if (CreatingNew)
+                textBoxNoteText.Focus();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            //            Data.Flag = flagSelectionControl1.FlagValue;
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -35,7 +56,7 @@ namespace Tracker
         private void button1_Click(object sender, EventArgs e)
         {
             Data.WhenCompleted = DateTime.Now;
-            textBox4.DataBindings[0].ReadValue();
+            textBoxCompleted.DataBindings[0].ReadValue();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -45,7 +66,7 @@ namespace Tracker
                 Data.Tag += $" ";
             }
             Data.Tag += $"Idea";
-            textBox2.DataBindings[0].ReadValue();
+            textBoxTags.DataBindings[0].ReadValue();
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -55,7 +76,7 @@ namespace Tracker
             if (tff.ShowDialog() == DialogResult.OK)
             {
                 Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
-                textBox2.DataBindings[0].ReadValue();
+                textBoxTags.DataBindings[0].ReadValue();
             }
         }
 
@@ -66,7 +87,7 @@ namespace Tracker
             if (tff.ShowDialog() == DialogResult.OK)
             {
                 Data.Tag = $"I expect this from {tff.Person} by {tff.By}";
-                textBox2.DataBindings[0].ReadValue();
+                textBoxTags.DataBindings[0].ReadValue();
             }
         }
     }

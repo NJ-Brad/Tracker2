@@ -14,47 +14,55 @@ namespace Tracker
     {
         // Properties
         ToolStripMenuItem? mruMenuItem = null;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ToolStripMenuItem? MruMenuItem
         {
             get { return mruMenuItem; }
             set { mruMenuItem = value; Connect(); }
         }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ConfigFileName { get; set; } = "RecentFiles.json";
 
         /// <summary>
         ///     Gets or sets whether the 'clear all' option should be displayed.
         /// </summary>
         [Description("Indicates whether the 'clear all' option should be displayed."), Category("Appearance")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool DisplayClearOption { get; set; } = true;
 
         /// <summary>
         ///     Gets or sets the text to display for 'clear all' option.
         /// </summary>
         [Description("Text to display for 'clear all' option."), Category("Data")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string ClearOptionText { get; set; } = "Clear All Recent Items";
 
         /// <summary>
         ///     Gets or sets whether the 'open all' option should be displayed.
         /// </summary>
         [Description("Indicates whether the 'open all' option should be displayed."), Category("Appearance")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool DisplayOpenAllOption { get; set; } = true;
 
         /// <summary>
         ///     Gets or sets the text to display for 'open all' option.
         /// </summary>
         [Description("Text to display for 'open all' option."), Category("Data")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string OpenAllOptionText { get; set; } = "Open All Recent Items";
 
         /// <summary>
         ///     Gets or sets the maximum number of items to display.
         /// </summary>
         [Description("Indicates the maximum number of items to display."), Category("Behavior")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public int MaxDisplayItems { get; set; } = 10;
 
         /// <summary>
         ///     Gets or sets whether to prepend human-friendly number indicatators to menu items.
         /// </summary>
         [Description("Indicates whether to prepend human-friendly number indicators to menu items."), Category("Behavior")]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool PrependItemNumbers { get; set; } = true;
 
         // Events

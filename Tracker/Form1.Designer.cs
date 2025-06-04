@@ -30,10 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            dataGridView1 = new DataGridView();
-            MeetingCol = new DataGridViewTextBoxColumn();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             newToolStripMenuItem = new ToolStripMenuItem();
@@ -49,49 +45,13 @@
             exitToolStripMenuItem = new ToolStripMenuItem();
             noRecentItemsToolStripMenuItem = new ToolStripMenuItem();
             recentFilesManager1 = new RecentFilesManager(components);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            listView2 = new ListView();
+            columnHeaderTeam = new ColumnHeader();
+            columnHeaderMeeting = new ColumnHeader();
+            columnHeaderComment = new ColumnHeader();
+            imageList1 = new ImageList(components);
             menuStrip1.SuspendLayout();
             SuspendLayout();
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { MeetingCol, Column1, Column2 });
-            dataGridView1.Location = new Point(13, 31);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1275, 655);
-            dataGridView1.TabIndex = 5;
-            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
-            dataGridView1.CellMouseDown += dataGridView1_CellMouseDown;
-            dataGridView1.DefaultValuesNeeded += dataGridView1_DefaultValuesNeeded;
-            dataGridView1.RowStateChanged += dataGridView1_RowStateChanged;
-            // 
-            // MeetingCol
-            // 
-            MeetingCol.DataPropertyName = "Meeting";
-            MeetingCol.HeaderText = "Meeting";
-            MeetingCol.MinimumWidth = 6;
-            MeetingCol.Name = "MeetingCol";
-            MeetingCol.Width = 125;
-            // 
-            // Column1
-            // 
-            Column1.DataPropertyName = "Tag";
-            Column1.HeaderText = "Tags";
-            Column1.MinimumWidth = 6;
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            Column1.Width = 125;
-            // 
-            // Column2
-            // 
-            Column2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Column2.DataPropertyName = "Text";
-            Column2.HeaderText = "Comment";
-            Column2.MinimumWidth = 6;
-            Column2.Name = "Column2";
             // 
             // menuStrip1
             // 
@@ -99,7 +59,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1300, 28);
+            menuStrip1.Size = new Size(1300, 33);
             menuStrip1.TabIndex = 26;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -107,7 +67,7 @@
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, toolStripSeparator, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator1, printToolStripMenuItem, toolStripSeparator2, recentItemsMenuItem, toolStripSeparator3, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(46, 24);
+            fileToolStripMenuItem.Size = new Size(50, 29);
             fileToolStripMenuItem.Text = "&File";
             // 
             // newToolStripMenuItem
@@ -116,7 +76,7 @@
             newToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             newToolStripMenuItem.Name = "newToolStripMenuItem";
             newToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-            newToolStripMenuItem.Size = new Size(181, 26);
+            newToolStripMenuItem.Size = new Size(197, 30);
             newToolStripMenuItem.Text = "&New";
             newToolStripMenuItem.Click += newToolStripMenuItem_Click;
             // 
@@ -126,14 +86,14 @@
             openToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             openToolStripMenuItem.Name = "openToolStripMenuItem";
             openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-            openToolStripMenuItem.Size = new Size(181, 26);
+            openToolStripMenuItem.Size = new Size(197, 30);
             openToolStripMenuItem.Text = "&Open";
             openToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // toolStripSeparator
             // 
             toolStripSeparator.Name = "toolStripSeparator";
-            toolStripSeparator.Size = new Size(178, 6);
+            toolStripSeparator.Size = new Size(194, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -141,21 +101,21 @@
             saveToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-            saveToolStripMenuItem.Size = new Size(181, 26);
+            saveToolStripMenuItem.Size = new Size(197, 30);
             saveToolStripMenuItem.Text = "&Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(181, 26);
+            saveAsToolStripMenuItem.Size = new Size(197, 30);
             saveAsToolStripMenuItem.Text = "Save &As";
             saveAsToolStripMenuItem.Click += saveAsToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(178, 6);
+            toolStripSeparator1.Size = new Size(194, 6);
             // 
             // printToolStripMenuItem
             // 
@@ -164,30 +124,30 @@
             printToolStripMenuItem.ImageTransparentColor = Color.Magenta;
             printToolStripMenuItem.Name = "printToolStripMenuItem";
             printToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-            printToolStripMenuItem.Size = new Size(181, 26);
+            printToolStripMenuItem.Size = new Size(197, 30);
             printToolStripMenuItem.Text = "&Print";
             printToolStripMenuItem.Click += printToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(178, 6);
+            toolStripSeparator2.Size = new Size(194, 6);
             // 
             // recentItemsMenuItem
             // 
             recentItemsMenuItem.Name = "recentItemsMenuItem";
-            recentItemsMenuItem.Size = new Size(181, 26);
+            recentItemsMenuItem.Size = new Size(197, 30);
             recentItemsMenuItem.Text = "Recent Items";
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(178, 6);
+            toolStripSeparator3.Size = new Size(194, 6);
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(181, 26);
+            exitToolStripMenuItem.Size = new Size(197, 30);
             exitToolStripMenuItem.Text = "E&xit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -200,21 +160,58 @@
             // recentFilesManager1
             // 
             recentFilesManager1.ClearOptionText = "Clear All Recent Items";
-            recentFilesManager1.ConfigFileName = "RecentFiles.json";
             recentFilesManager1.DisplayClearOption = true;
             recentFilesManager1.DisplayOpenAllOption = false;
             recentFilesManager1.MaxDisplayItems = 10;
-            recentFilesManager1.MruMenuItem = recentItemsMenuItem;
             recentFilesManager1.OpenAllOptionText = "Open All Recent Items";
             recentFilesManager1.PrependItemNumbers = true;
             recentFilesManager1.FileClicked += recentFilesManager1_FileClicked;
             // 
+            // listView2
+            // 
+            listView2.Columns.AddRange(new ColumnHeader[] { columnHeaderTeam, columnHeaderMeeting, columnHeaderComment });
+            listView2.Dock = DockStyle.Fill;
+            listView2.FullRowSelect = true;
+            listView2.Location = new Point(0, 33);
+            listView2.Name = "listView2";
+            listView2.OwnerDraw = true;
+            listView2.Size = new Size(1300, 665);
+            listView2.TabIndex = 29;
+            listView2.UseCompatibleStateImageBehavior = false;
+            listView2.View = View.Details;
+            listView2.DrawColumnHeader += listView2_DrawColumnHeader;
+            listView2.DrawItem += listView2_DrawItem;
+            listView2.DrawSubItem += listView2_DrawSubItem;
+            listView2.KeyDown += listView2_KeyDown;
+            listView2.MouseDoubleClick += listView2_MouseDoubleClick;
+            listView2.MouseDown += listView2_MouseDown;
+            // 
+            // columnHeaderTeam
+            // 
+            columnHeaderTeam.Text = "";
+            // 
+            // columnHeaderMeeting
+            // 
+            columnHeaderMeeting.Text = "Meeting";
+            // 
+            // columnHeaderComment
+            // 
+            columnHeaderComment.Text = "Comment";
+            // 
+            // imageList1
+            // 
+            imageList1.ColorDepth = ColorDepth.Depth32Bit;
+            imageList1.ImageStream = (ImageListStreamer)resources.GetObject("imageList1.ImageStream");
+            imageList1.TransparentColor = Color.Transparent;
+            imageList1.Images.SetKeyName(0, "Open.bmp");
+            imageList1.Images.SetKeyName(1, "Closed.bmp");
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(13F, 31F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1300, 698);
-            Controls.Add(dataGridView1);
+            Controls.Add(listView2);
             Controls.Add(menuStrip1);
             Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -222,7 +219,6 @@
             Margin = new Padding(5);
             Name = "Form1";
             Text = "Thought Tracker";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -230,7 +226,6 @@
         }
 
         #endregion
-        private DataGridView dataGridView1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
@@ -246,8 +241,10 @@
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem noRecentItemsToolStripMenuItem;
         private RecentFilesManager recentFilesManager1;
-        private DataGridViewTextBoxColumn MeetingCol;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
+        private ListView listView2;
+        private ColumnHeader columnHeaderTeam;
+        private ColumnHeader columnHeaderMeeting;
+        private ColumnHeader columnHeaderComment;
+        private ImageList imageList1;
     }
 }

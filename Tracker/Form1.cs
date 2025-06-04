@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Text.Json;
 using Tracker.Models;
 
@@ -9,7 +8,14 @@ namespace Tracker
         public Form1()
         {
             InitializeComponent();
-            CreateDataBindings();
+
+            Bitmap bm = (Bitmap)imageList1.Images[0];
+            bm.MakeTransparent();
+            imageList1.Images[0] = bm;
+
+            bm = (Bitmap)imageList1.Images[1];
+            bm.MakeTransparent();
+            imageList1.Images[1] = bm;
         }
 
         protected override void OnShown(EventArgs e)
@@ -20,6 +26,18 @@ namespace Tracker
             {
                 LoadDocument(latestFile);
             }
+        }
+
+        // https://csharpexamples.com/c-resize-bitmap-example/
+        public Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
+        {
+            Bitmap result = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.DrawImage(bmp, 0, 0, width, height);
+            }
+
+            return result;
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -47,29 +65,66 @@ namespace Tracker
 
         private void SaveDocument()
         {
-            dataGridView1.CancelEdit();
-
             File.WriteAllText(documentName, JsonSerializer.Serialize(doc));
-        }
-
-        BindingSource bs1 = new BindingSource();
-
-        private void CreateDataBindings()
-        {
-            // https://stackoverflow.com/questions/11078919/bindingsource-datagridview-interaction
-
-            BindingList<TrackedItemModel> bList1 = new BindingList<TrackedItemModel>(doc.Items);
-            bs1.DataSource = bList1;
-            dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.DataSource = bs1;
         }
 
         private void ShowDocument()
         {
-            // https://stackoverflow.com/questions/11078919/bindingsource-datagridview-interaction
+            doc.Items.Select(i => i.Team).OrderBy(i => i).Distinct().ToList().ForEach(team =>
+            {
+                AddHeading(team);
+            });
 
-            BindingList<TrackedItemModel> bList1 = new BindingList<TrackedItemModel>(doc.Items);
-            bs1.DataSource = bList1;
+            ShowHeadings();
+        }
+
+        private void AddHeading(string team)
+        {
+            Heading heading = new Heading(team);
+            headings.Add(heading.Title, heading);
+            listView2.Items.Add(heading.Title).Tag = heading;
+        }
+
+        Dictionary<string, Heading> headings = new Dictionary<string, Heading>();
+
+        // fill the teams first, including the IsExpanded property
+        // THEN fill the details, only for the teams that are expanded
+
+        //bool rowShown = false;
+        private void ShowHeadings()
+        {
+            listView2.Items.Clear();
+            //rowShown = false;
+            foreach (string key in headings.Keys)
+            {
+                Heading h = headings[key];
+                listView2.Items.Add(h.Title).Tag = h;
+                if (h.IsExpanded)
+                {
+                    ShowItems(h.Title);
+                }
+            }
+
+            //if (rowShown)
+            //    listView2.Columns[1].Width = -1;
+            //else
+            //    listView2.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+            listView2.Columns[1].Width = 200;
+            listView2.Columns[2].Width = -2;
+        }
+
+        private void ShowItems(string team)
+        {
+            //doc.Items.Select(i => i.Team).OrderBy(i => i).Distinct().ToList().ForEach(team =>
+            doc.Items.Where(i => i.Team == team).ToList().ForEach(item =>
+            {
+                ListViewItem lvi = new ListViewItem("", 0);
+                lvi.SubItems.Add(item.Meeting ?? "New Meeting");
+                lvi.SubItems.Add(item.Text ?? "");
+                lvi.Tag = item;
+                listView2.Items.Add(lvi);
+                //rowShown = true;
+            });
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -110,7 +165,6 @@ namespace Tracker
                 recentFilesManager1.FileOpened(documentName);
                 SaveDocument();
             }
-
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,72 +199,147 @@ namespace Tracker
             Close();
         }
 
-        private void dataGridView1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
-        {
-            //System.Diagnostics.Debug.WriteLine(e.Row.State.ToString());
-        }
-
         string? previousMeeting = "New Meeting";
         private void dataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             if (e.Row.Index > 0)
             {
-                //previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString() ?? "New Meeting";
-                if (dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value == null)
-                {
-                    previousMeeting = "";
-                }
-                else
-                {
-                    previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString();
-                }
+                //if (dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value == null)
+                //{
+                //    previousMeeting = "";
+                //}
+                //else
+                //{
+                //    previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString();
+                //}
             }
             e.Row.Cells["MeetingCol"].Value = previousMeeting;
         }
 
-        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void listView2_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Item != null && e.Item.Tag != null && e.Item.Tag is Heading heading)
             {
-                if (e.ColumnIndex == 1)
+                Rectangle bounds = e.Bounds;
+                bounds.Width = listView2.ClientRectangle.Width - SystemInformation.VerticalScrollBarWidth; // Adjust for scrollbar width
+                if (heading.IsExpanded)
                 {
-                    if (e.RowIndex != -1)
-                    {
-                        TrackedItemModel tim = dataGridView1.Rows[e.RowIndex].DataBoundItem as TrackedItemModel;
-
-                        NoteDetailsForm ndf = new NoteDetailsForm();
-
-                        ndf.Data = new TrackedItemModel(tim);
-
-                        if (ndf.ShowDialog() == DialogResult.OK)
-                        {
-                            //dataGridView1.Rows[e.RowIndex].SetValues(ndf.Data);
-                            tim.CopyFrom(ndf.Data);
-
-                            dataGridView1.Refresh();
-                        }
-                    }
+                    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
+                    e.Graphics.DrawImage(imageList1.Images[0], bounds.X + 2, bounds.Y + 4, 16, 16);
+                }
+                else
+                {
+                    //e.Graphics.FillRectangle(SystemBrushes.ControlDark, bounds);
+                    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
+                    e.Graphics.DrawImage(imageList1.Images[1], bounds.X + 2, bounds.Y + 4, 16, 16);
                 }
 
+                bounds.X += 20; // Adjust for image width
+                bounds.Width -= 20; // Adjust for image width
+
+                e.Graphics.DrawString(e.Item.Text, listView2.Font, SystemBrushes.ActiveCaptionText, bounds);
+            }
+            else
+                e.DrawDefault = true;
+
+        }
+
+        private void listView2_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel tim)
+            {
+                e.DrawDefault = true;
+            }
+
+            //if (headings["a"].IsExpanded)
+            //    e.DrawDefault = true;
+            //else
+            //{
+            //    //e.DrawBackground(); // this is the default
+            //    e.Graphics.FillRectangle(SystemBrushes.ControlDark, e.Bounds);
+            //    e.Graphics.DrawString(e.Item.Text, listView2.Font, SystemBrushes.ActiveCaptionText, e.Bounds);
+            //}
+        }
+
+        private void listView2_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void listView2_MouseDown(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo hit = listView2.HitTest(e.X, e.Y);
+
+            if (hit.Item == null || hit.Item.Tag == null)
+                return;
+
+            if (hit.Item.Tag is Heading heading)
+            {
+                if (e.X < hit.Item.Bounds.X + 20) // Check if clicked on the image area
+                {
+                    heading.IsExpanded = !heading.IsExpanded;
+                    ShowHeadings();
+                    return;
+                }
             }
         }
 
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (e.RowIndex != -1)
-            {
-                TrackedItemModel tim = dataGridView1.Rows[e.RowIndex].DataBoundItem as TrackedItemModel;
+            ListViewHitTestInfo hit = listView2.HitTest(e.X, e.Y);
 
+            if (hit.Item == null || hit.Item.Tag == null)
+                return;
+
+            if (hit.Item.Tag is TrackedItemModel tim)
+            {
                 NoteDetailsForm ndf = new NoteDetailsForm();
 
-                ndf.Data = new TrackedItemModel(tim);
+                ////ndf.Data = new TrackedItemModel(tim);
+                ndf.Data = tim;
 
                 if (ndf.ShowDialog() == DialogResult.OK)
                 {
-                    //dataGridView1.Rows[e.RowIndex].SetValues(ndf.Data);
-                    tim.CopyFrom(ndf.Data);
+                    ShowHeadings();
+                }
+            }
+        }
 
-                    dataGridView1.Refresh();
+        private void listView2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == (int)Keys.Insert)
+            {
+                NoteDetailsForm ndf = new NoteDetailsForm();
+
+                ndf.Data = new TrackedItemModel();
+                if (listView2.SelectedItems.Count > 0 && listView2.SelectedItems[0].Tag is TrackedItemModel tim)
+                {
+                    ndf.Data.Team = tim.Team; // Copy the team from the selected item
+                    ndf.Data.Meeting = tim.Meeting; // Copy the team from the selected item
+                    ndf.CreatingNew = true;
+                }
+
+                if (ndf.ShowDialog() == DialogResult.OK)
+                {
+                    if (!headings.ContainsKey(ndf.Data.Team))
+                    {
+                        AddHeading(ndf.Data.Team);
+                    }
+                    doc.Items.Add(ndf.Data);
+                    ShowHeadings();
+                }
+            }
+
+            if (e.KeyValue == (int)Keys.Delete)
+            {
+                if (listView2.SelectedItems.Count > 0 && listView2.SelectedItems[0].Tag is TrackedItemModel tim)
+                {
+                    DialogResult dr = MessageBox.Show($"Are you sure you want to delete the item '{tim.Text}'?", "Delete Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (dr == DialogResult.Yes)
+                    {
+                        doc.Items.Remove(tim);
+                        ShowHeadings();
+                    }
                 }
             }
         }
