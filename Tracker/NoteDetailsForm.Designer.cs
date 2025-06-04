@@ -52,6 +52,7 @@
             label7 = new Label();
             label8 = new Label();
             flagSelectionControl1 = new FlagSelectionControl();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label1
@@ -92,7 +93,7 @@
             // 
             // textBoxFollowUp
             // 
-            textBoxFollowUp.Location = new Point(161, 291);
+            textBoxFollowUp.Location = new Point(162, 260);
             textBoxFollowUp.Margin = new Padding(4);
             textBoxFollowUp.Multiline = true;
             textBoxFollowUp.Name = "textBoxFollowUp";
@@ -102,7 +103,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(59, 324);
+            label3.Location = new Point(60, 293);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(92, 25);
@@ -111,7 +112,7 @@
             // 
             // textBoxCompleted
             // 
-            textBoxCompleted.Location = new Point(161, 361);
+            textBoxCompleted.Location = new Point(162, 330);
             textBoxCompleted.Margin = new Padding(4);
             textBoxCompleted.Name = "textBoxCompleted";
             textBoxCompleted.ReadOnly = true;
@@ -122,7 +123,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(50, 365);
+            label4.Location = new Point(51, 334);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(100, 25);
@@ -131,7 +132,7 @@
             // 
             // buttonMarkComplete
             // 
-            buttonMarkComplete.Location = new Point(359, 359);
+            buttonMarkComplete.Location = new Point(360, 328);
             buttonMarkComplete.Margin = new Padding(4);
             buttonMarkComplete.Name = "buttonMarkComplete";
             buttonMarkComplete.Size = new Size(158, 36);
@@ -142,7 +143,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(646, 407);
+            button2.Location = new Point(647, 376);
             button2.Margin = new Padding(4);
             button2.Name = "button2";
             button2.Size = new Size(118, 36);
@@ -153,7 +154,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(771, 407);
+            button3.Location = new Point(772, 376);
             button3.Margin = new Padding(4);
             button3.Name = "button3";
             button3.Size = new Size(118, 36);
@@ -165,37 +166,40 @@
             // linkLabel1
             // 
             linkLabel1.AutoSize = true;
-            linkLabel1.Location = new Point(170, 262);
+            linkLabel1.Location = new Point(25, 176);
             linkLabel1.Margin = new Padding(4, 0, 4, 0);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(46, 25);
             linkLabel1.TabIndex = 12;
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Idea";
+            linkLabel1.Visible = false;
             linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // linkLabel2
             // 
             linkLabel2.AutoSize = true;
-            linkLabel2.Location = new Point(225, 262);
+            linkLabel2.Location = new Point(13, 210);
             linkLabel2.Margin = new Padding(4, 0, 4, 0);
             linkLabel2.Name = "linkLabel2";
             linkLabel2.Size = new Size(58, 25);
             linkLabel2.TabIndex = 13;
             linkLabel2.TabStop = true;
             linkLabel2.Text = "I Owe";
+            linkLabel2.Visible = false;
             linkLabel2.LinkClicked += linkLabel2_LinkClicked;
             // 
             // linkLabel3
             // 
             linkLabel3.AutoSize = true;
-            linkLabel3.Location = new Point(291, 262);
+            linkLabel3.Location = new Point(-2, 244);
             linkLabel3.Margin = new Padding(4, 0, 4, 0);
             linkLabel3.Name = "linkLabel3";
             linkLabel3.Size = new Size(73, 25);
             linkLabel3.TabIndex = 14;
             linkLabel3.TabStop = true;
             linkLabel3.Text = "I Expect";
+            linkLabel3.Visible = false;
             linkLabel3.LinkClicked += linkLabel3_LinkClicked;
             // 
             // textBoxTeam
@@ -292,13 +296,25 @@
             flagSelectionControl1.TabIndex = 27;
             flagSelectionControl1.FlagChanged += flagSelectionControl1_FlagChanged;
             // 
+            // button1
+            // 
+            button1.Location = new Point(521, 376);
+            button1.Margin = new Padding(4);
+            button1.Name = "button1";
+            button1.Size = new Size(118, 36);
+            button1.TabIndex = 28;
+            button1.Text = "Save && New";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
             // NoteDetailsForm
             // 
             AcceptButton = button2;
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button3;
-            ClientSize = new Size(904, 454);
+            ClientSize = new Size(904, 425);
+            Controls.Add(button1);
             Controls.Add(flagSelectionControl1);
             Controls.Add(label8);
             Controls.Add(textBoxCreated);
@@ -329,6 +345,7 @@
             MinimizeBox = false;
             Name = "NoteDetailsForm";
             ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Note Details";
             ResumeLayout(false);
             PerformLayout();
@@ -360,5 +377,6 @@
         private Label label7;
         private Label label8;
         private FlagSelectionControl flagSelectionControl1;
+        private Button button1;
     }
 }

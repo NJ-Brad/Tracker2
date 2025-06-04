@@ -257,7 +257,7 @@ namespace Tracker
                 }
                 else
                 {
-                    using (Brush brush = new SolidBrush(BackColor))
+                    using (Brush brush = new SolidBrush(listView2.BackColor))
                     {
                         e.Graphics.FillRectangle(brush, cellBounds);
                     }
@@ -379,15 +379,29 @@ namespace Tracker
                     ndf.CreatingNew = true;
                 }
 
-                if (ndf.ShowDialog() == DialogResult.OK)
+                do
                 {
-                    if (!headings.ContainsKey(ndf.Data.Team))
+                    if (ndf.ShowDialog() == DialogResult.OK)
                     {
-                        AddHeading(ndf.Data.Team);
+                        if (!headings.ContainsKey(ndf.Data.Team))
+                        {
+                            AddHeading(ndf.Data.Team);
+                        }
+                        doc.Items.Add(ndf.Data);
+                        ShowHeadings();
+
+                        string prevTeam = ndf.Data.Team;
+                        string prevMeeting = ndf.Data.Meeting;
+
+                        if (ndf.Repeat)
+                        {
+                            ndf.Data = new TrackedItemModel();
+                            ndf.Data.Team = prevTeam;
+                            ndf.Data.Meeting = prevMeeting;
+                            ndf.CreatingNew = true;
+                        }
                     }
-                    doc.Items.Add(ndf.Data);
-                    ShowHeadings();
-                }
+                } while (ndf.Repeat);
             }
 
             if (e.KeyValue == (int)Keys.Delete)
