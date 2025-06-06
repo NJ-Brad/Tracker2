@@ -45,12 +45,12 @@
             exitToolStripMenuItem = new ToolStripMenuItem();
             noRecentItemsToolStripMenuItem = new ToolStripMenuItem();
             recentFilesManager1 = new RecentFilesManager(components);
-            listView2 = new ListView();
-            columnHeaderTeam = new ColumnHeader();
-            columnHeaderMeeting = new ColumnHeader();
-            columnHeaderComment = new ColumnHeader();
             imageList1 = new ImageList(components);
             imageList2 = new ImageList(components);
+            groupedListView1 = new GroupedListView();
+            columnHeaderTeam2 = new ColumnHeader();
+            columnMeeting2 = new ColumnHeader();
+            columnComment2 = new ColumnHeader();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -168,38 +168,6 @@
             recentFilesManager1.PrependItemNumbers = true;
             recentFilesManager1.FileClicked += recentFilesManager1_FileClicked;
             // 
-            // listView2
-            // 
-            listView2.Columns.AddRange(new ColumnHeader[] { columnHeaderTeam, columnHeaderMeeting, columnHeaderComment });
-            listView2.Dock = DockStyle.Fill;
-            listView2.FullRowSelect = true;
-            listView2.Location = new Point(0, 33);
-            listView2.MultiSelect = false;
-            listView2.Name = "listView2";
-            listView2.OwnerDraw = true;
-            listView2.Size = new Size(1300, 665);
-            listView2.TabIndex = 29;
-            listView2.UseCompatibleStateImageBehavior = false;
-            listView2.View = View.Details;
-            listView2.DrawColumnHeader += listView2_DrawColumnHeader;
-            listView2.DrawItem += listView2_DrawItem;
-            listView2.DrawSubItem += listView2_DrawSubItem;
-            listView2.KeyDown += listView2_KeyDown;
-            listView2.MouseDoubleClick += listView2_MouseDoubleClick;
-            listView2.MouseDown += listView2_MouseDown;
-            // 
-            // columnHeaderTeam
-            // 
-            columnHeaderTeam.Text = "";
-            // 
-            // columnHeaderMeeting
-            // 
-            columnHeaderMeeting.Text = "Meeting";
-            // 
-            // columnHeaderComment
-            // 
-            columnHeaderComment.Text = "Comment";
-            // 
             // imageList1
             // 
             imageList1.ColorDepth = ColorDepth.Depth32Bit;
@@ -217,12 +185,42 @@
             imageList2.Images.SetKeyName(1, "ArrowRight.bmp");
             imageList2.Images.SetKeyName(2, "ArrowLeft.bmp");
             // 
+            // groupedListView1
+            // 
+            groupedListView1.Columns.AddRange(new ColumnHeader[] { columnHeaderTeam2, columnMeeting2, columnComment2 });
+            groupedListView1.Dock = DockStyle.Fill;
+            groupedListView1.FullRowSelect = true;
+            groupedListView1.GridLines = true;
+            groupedListView1.Location = new Point(0, 33);
+            groupedListView1.MultiSelect = false;
+            groupedListView1.Name = "groupedListView1";
+            groupedListView1.OwnerDraw = true;
+            groupedListView1.Size = new Size(1300, 665);
+            groupedListView1.TabIndex = 30;
+            groupedListView1.UseCompatibleStateImageBehavior = false;
+            groupedListView1.View = View.Details;
+            groupedListView1.DrawItem += groupedListView1_DrawItem;
+            groupedListView1.KeyDown += groupedListView1_KeyDown;
+            groupedListView1.MouseDoubleClick += groupedListView1_MouseDoubleClick;
+            // 
+            // columnHeaderTeam2
+            // 
+            columnHeaderTeam2.Text = "";
+            // 
+            // columnMeeting2
+            // 
+            columnMeeting2.Text = "Meeting";
+            // 
+            // columnComment2
+            // 
+            columnComment2.Text = "Comment";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1300, 698);
-            Controls.Add(listView2);
+            Controls.Add(groupedListView1);
             Controls.Add(menuStrip1);
             Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -252,11 +250,11 @@
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem noRecentItemsToolStripMenuItem;
         private RecentFilesManager recentFilesManager1;
-        private ListView listView2;
-        private ColumnHeader columnHeaderTeam;
-        private ColumnHeader columnHeaderMeeting;
-        private ColumnHeader columnHeaderComment;
         private ImageList imageList1;
         private ImageList imageList2;
+        private GroupedListView groupedListView1;
+        private ColumnHeader columnHeaderTeam2;
+        private ColumnHeader columnMeeting2;
+        private ColumnHeader columnComment2;
     }
 }

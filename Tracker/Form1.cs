@@ -70,61 +70,26 @@ namespace Tracker
 
         private void ShowDocument()
         {
+            groupedListView1.Groups.Clear();
+
             doc.Items.Select(i => i.Team).OrderBy(i => i).Distinct().ToList().ForEach(team =>
             {
-                AddHeading(team);
-            });
+                groupedListView1.Groups.Add(team, team);
 
-            ShowHeadings();
-        }
-
-        private void AddHeading(string team)
-        {
-            Heading heading = new Heading(team);
-            headings.Add(heading.Title, heading);
-            listView2.Items.Add(heading.Title).Tag = heading;
-        }
-
-        Dictionary<string, Heading> headings = new Dictionary<string, Heading>();
-
-        // fill the teams first, including the IsExpanded property
-        // THEN fill the details, only for the teams that are expanded
-
-        //bool rowShown = false;
-        private void ShowHeadings()
-        {
-            listView2.Items.Clear();
-            //rowShown = false;
-            foreach (string key in headings.Keys)
-            {
-                Heading h = headings[key];
-                listView2.Items.Add(h.Title).Tag = h;
-                if (h.IsExpanded)
+                doc.Items.Where(i => i.Team == team).ToList().ForEach(item =>
                 {
-                    ShowItems(h.Title);
-                }
-            }
-
-            //if (rowShown)
-            //    listView2.Columns[1].Width = -1;
-            //else
-            //    listView2.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-            listView2.Columns[1].Width = 200;
-            listView2.Columns[2].Width = -2;
-        }
-
-        private void ShowItems(string team)
-        {
-            //doc.Items.Select(i => i.Team).OrderBy(i => i).Distinct().ToList().ForEach(team =>
-            doc.Items.Where(i => i.Team == team).ToList().ForEach(item =>
-            {
-                ListViewItem lvi = new ListViewItem("", 0);
-                lvi.SubItems.Add(item.Meeting ?? "New Meeting");
-                lvi.SubItems.Add(item.Text ?? "");
-                lvi.Tag = item;
-                listView2.Items.Add(lvi);
-                //rowShown = true;
+                    ListViewItem lvi = new ListViewItem("", 0);
+                    lvi.SubItems.Add(item.Meeting ?? "New Meeting");
+                    lvi.SubItems.Add(item.Text ?? "");
+                    lvi.Tag = item;
+                    lvi.Group = groupedListView1.Groups[^1];
+                    groupedListView1.Items.Add(lvi);
+                });
             });
+            groupedListView1.ShowData();
+
+            groupedListView1.Columns[1].Width = 200;
+            groupedListView1.Columns[2].Width = -2;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -200,64 +165,44 @@ namespace Tracker
         }
 
         string? previousMeeting = "New Meeting";
-        private void dataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+
+        private void groupedListView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (e.Row.Index > 0)
+            ListViewHitTestInfo hit = groupedListView1.HitTest(e.X, e.Y);
+
+            if (hit.Item == null || hit.Item.Tag == null)
+                return;
+
+            if (hit.Item.Tag is TrackedItemModel tim)
             {
-                //if (dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value == null)
-                //{
-                //    previousMeeting = "";
-                //}
-                //else
-                //{
-                //    previousMeeting = dataGridView1.Rows[e.Row.Index - 1].Cells["MeetingCol"].Value.ToString();
-                //}
+                NoteDetailsForm ndf = new NoteDetailsForm();
+
+                ndf.Data = tim;
+
+                if (ndf.ShowDialog() == DialogResult.OK)
+                {
+                    ShowDocument();
+                }
             }
-            e.Row.Cells["MeetingCol"].Value = previousMeeting;
         }
 
-        private void listView2_DrawItem(object sender, DrawListViewItemEventArgs e)
+        private void groupedListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
-            if (e.Item != null && e.Item.Tag != null && e.Item.Tag is Heading heading)
-            {
-                Rectangle bounds = e.Bounds;
-                bounds.Width = listView2.ClientRectangle.Width - SystemInformation.VerticalScrollBarWidth; // Adjust for scrollbar width
-                if (heading.IsExpanded)
-                {
-                    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
-                    e.Graphics.DrawImage(imageList1.Images[0], bounds.X + 2, bounds.Y + 4, 16, 16);
-                }
-                else
-                {
-                    //e.Graphics.FillRectangle(SystemBrushes.ControlDark, bounds);
-                    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
-                    e.Graphics.DrawImage(imageList1.Images[1], bounds.X + 2, bounds.Y + 4, 16, 16);
-                }
-
-                bounds.X += 20; // Adjust for image width
-                bounds.Width -= 20; // Adjust for image width
-
-                e.Graphics.DrawString(e.Item.Text, listView2.Font, SystemBrushes.ActiveCaptionText, bounds);
-            }
-            else if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel trackedItem)
+            if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel trackedItem)
             {
                 Rectangle cellBounds = e.Bounds;
-                cellBounds.Width = listView2.Columns[0].Width;
+                cellBounds.Width = groupedListView1.Columns[0].Width;
 
 
-                //if ((e.State & ListViewItemStates.Selected) != 0)
                 if (e.Item.Selected)
                 {
                     // Draw the background and focus rectangle for a selected item.
-                    //e.Graphics.FillRectangle(Brushes.Maroon, e.Bounds);
-                    //                    using (Brush brush = SolidBrush()
-
                     e.Graphics.FillRectangle(SystemBrushes.Highlight, cellBounds);
                     e.DrawFocusRectangle();
                 }
                 else
                 {
-                    using (Brush brush = new SolidBrush(listView2.BackColor))
+                    using (Brush brush = new SolidBrush(groupedListView1.BackColor))
                     {
                         e.Graphics.FillRectangle(brush, cellBounds);
                     }
@@ -292,87 +237,22 @@ namespace Tracker
                         //    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
                         //    break;
                 }
+                e.DrawDefault = false;
             }
             else
+            {
                 e.DrawDefault = true;
-
-        }
-
-        private void listView2_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
-        {
-            if (e.ColumnIndex == 0) // Draw the first column (Heading or TrackedItemModel)
-            {
-                return;
-            }
-            e.DrawDefault = true;
-
-            //if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel tim)
-            //{
-            //    e.DrawDefault = true;
-            //}
-
-            //if (headings["a"].IsExpanded)
-            //    e.DrawDefault = true;
-            //else
-            //{
-            //    //e.DrawBackground(); // this is the default
-            //    e.Graphics.FillRectangle(SystemBrushes.ControlDark, e.Bounds);
-            //    e.Graphics.DrawString(e.Item.Text, listView2.Font, SystemBrushes.ActiveCaptionText, e.Bounds);
-            //}
-        }
-
-        private void listView2_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            e.DrawDefault = true;
-        }
-
-        private void listView2_MouseDown(object sender, MouseEventArgs e)
-        {
-            ListViewHitTestInfo hit = listView2.HitTest(e.X, e.Y);
-
-            if (hit.Item == null || hit.Item.Tag == null)
-                return;
-
-            if (hit.Item.Tag is Heading heading)
-            {
-                if (e.X < hit.Item.Bounds.X + 20) // Check if clicked on the image area
-                {
-                    heading.IsExpanded = !heading.IsExpanded;
-                    ShowHeadings();
-                    return;
-                }
             }
         }
 
-        private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            ListViewHitTestInfo hit = listView2.HitTest(e.X, e.Y);
-
-            if (hit.Item == null || hit.Item.Tag == null)
-                return;
-
-            if (hit.Item.Tag is TrackedItemModel tim)
-            {
-                NoteDetailsForm ndf = new NoteDetailsForm();
-
-                ////ndf.Data = new TrackedItemModel(tim);
-                ndf.Data = tim;
-
-                if (ndf.ShowDialog() == DialogResult.OK)
-                {
-                    ShowHeadings();
-                }
-            }
-        }
-
-        private void listView2_KeyDown(object sender, KeyEventArgs e)
+        private void groupedListView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyValue == (int)Keys.Insert)
             {
                 NoteDetailsForm ndf = new NoteDetailsForm();
 
                 ndf.Data = new TrackedItemModel();
-                if (listView2.SelectedItems.Count > 0 && listView2.SelectedItems[0].Tag is TrackedItemModel tim)
+                if (groupedListView1.SelectedItems.Count > 0 && groupedListView1.SelectedItems[0].Tag is TrackedItemModel tim)
                 {
                     ndf.Data.Team = tim.Team; // Copy the team from the selected item
                     ndf.Data.Meeting = tim.Meeting; // Copy the team from the selected item
@@ -383,12 +263,7 @@ namespace Tracker
                 {
                     if (ndf.ShowDialog() == DialogResult.OK)
                     {
-                        if (!headings.ContainsKey(ndf.Data.Team))
-                        {
-                            AddHeading(ndf.Data.Team);
-                        }
-                        doc.Items.Add(ndf.Data);
-                        ShowHeadings();
+                        ShowDocument();
 
                         string prevTeam = ndf.Data.Team;
                         string prevMeeting = ndf.Data.Meeting;
@@ -406,13 +281,13 @@ namespace Tracker
 
             if (e.KeyValue == (int)Keys.Delete)
             {
-                if (listView2.SelectedItems.Count > 0 && listView2.SelectedItems[0].Tag is TrackedItemModel tim)
+                if (groupedListView1.SelectedItems.Count > 0 && groupedListView1.SelectedItems[0].Tag is TrackedItemModel tim)
                 {
                     DialogResult dr = MessageBox.Show($"Are you sure you want to delete the item '{tim.Text}'?", "Delete Item", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (dr == DialogResult.Yes)
                     {
                         doc.Items.Remove(tim);
-                        ShowHeadings();
+                        ShowDocument();
                     }
                 }
             }
