@@ -225,13 +225,13 @@ namespace Tracker
                 {
                     case "Idea":
                         //                        e.Graphics.DrawImage(imageList2.Images[0], bounds.X, bounds.Y + 4, 16, 16);
-                        e.Graphics.DrawImage(imageList2.Images[0], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        e.Graphics.DrawImage(imageList2.Images[0], cellBounds.X, cellBounds.Y + 4, 32, 32);
                         break;
                     case "I_Owe":
-                        e.Graphics.DrawImage(imageList2.Images[1], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        e.Graphics.DrawImage(imageList2.Images[1], cellBounds.X, cellBounds.Y + 4, 32, 32);
                         break;
                     case "They_Owe":
-                        e.Graphics.DrawImage(imageList2.Images[2], cellBounds.X, cellBounds.Y + 4, 16, 16);
+                        e.Graphics.DrawImage(imageList2.Images[2], cellBounds.X, cellBounds.Y + 4, 32, 32);
                         break;
                         //default:
                         //    e.Graphics.FillRectangle(SystemBrushes.ControlLight, bounds);
@@ -252,17 +252,18 @@ namespace Tracker
                 NoteDetailsForm ndf = new NoteDetailsForm();
 
                 ndf.Data = new TrackedItemModel();
+                ndf.CreatingNew = true;
                 if (groupedListView1.SelectedItems.Count > 0 && groupedListView1.SelectedItems[0].Tag is TrackedItemModel tim)
                 {
                     ndf.Data.Team = tim.Team; // Copy the team from the selected item
                     ndf.Data.Meeting = tim.Meeting; // Copy the team from the selected item
-                    ndf.CreatingNew = true;
                 }
 
                 do
                 {
                     if (ndf.ShowDialog() == DialogResult.OK)
                     {
+                        doc.Items.Add(ndf.Data);
                         ShowDocument();
 
                         string prevTeam = ndf.Data.Team;

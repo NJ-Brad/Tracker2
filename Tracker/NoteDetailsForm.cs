@@ -18,6 +18,18 @@ namespace Tracker
 
         private BindingSource dataSource = new BindingSource();
 
+        //bool creatingNew = false;
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        //public bool CreatingNew
+        //{
+        //    get { return creatingNew; }
+        //    set
+        //    {
+        //        creatingNew = value;
+        //        button1.Visible = creatingNew;
+        //    }
+        //}
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CreatingNew { get; set; } = false;
 
@@ -56,7 +68,22 @@ namespace Tracker
             button1.Visible = CreatingNew;
 
             if (CreatingNew)
-                textBoxNoteText.Focus();
+            {
+                if (string.IsNullOrEmpty(Data.Team))
+                {
+                    textBoxTeam.Focus();
+                }
+                else if (string.IsNullOrEmpty(Data.Meeting))
+                {
+                    textBoxMeeting.Focus();
+                }
+                else
+                {
+                    textBoxNoteText.Focus();
+                }
+
+                AcceptButton = button1;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
