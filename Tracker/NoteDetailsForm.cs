@@ -11,12 +11,12 @@ namespace Tracker
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public TrackedItemModel Data { get; set; }
+        public TrackedItemModel? Data { get; set; }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool Repeat { get; set; } = false;
 
-        private BindingSource dataSource = new BindingSource();
+        private readonly BindingSource dataSource = [];
 
         //bool creatingNew = false;
         //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -69,11 +69,11 @@ namespace Tracker
 
             if (CreatingNew)
             {
-                if (string.IsNullOrEmpty(Data.Team))
+                if (string.IsNullOrEmpty(Data?.Team))
                 {
                     textBoxTeam.Focus();
                 }
-                else if (string.IsNullOrEmpty(Data.Meeting))
+                else if (string.IsNullOrEmpty(Data?.Meeting))
                 {
                     textBoxMeeting.Focus();
                 }
@@ -86,7 +86,7 @@ namespace Tracker
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             Repeat = false;
             //            Data.Flag = flagSelectionControl1.FlagValue;
@@ -94,7 +94,7 @@ namespace Tracker
             Close();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             Repeat = false;
 
@@ -102,73 +102,92 @@ namespace Tracker
             Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
-            Data.WhenCompleted = DateTime.Now;
+            if(Data != null)
+            {
+                Data.WhenCompleted = DateTime.Now;
+            }
             textBoxCompleted.DataBindings[0].ReadValue();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(Data.Tag))
+            if (!string.IsNullOrEmpty(Data?.Tag))
             {
                 Data.Tag += $" ";
             }
-            Data.Tag += $"Idea";
+            if(Data?.Tag != null)
+            {
+                Data.Tag += $"Idea";
+            }
             textBoxTags.DataBindings[0].ReadValue();
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ToFromForm tff = new ToFromForm();
-            tff.To = true;
+            ToFromForm tff = new()
+            {
+                To = true
+            };
             if (tff.ShowDialog() == DialogResult.OK)
             {
-                Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
+                if(Data?.Tag != null)
+                    Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
                 textBoxTags.DataBindings[0].ReadValue();
             }
         }
 
-        private void linkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel3_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ToFromForm tff = new ToFromForm();
-            tff.To = false;
+            ToFromForm tff = new()
+            {
+                To = false
+            };
             if (tff.ShowDialog() == DialogResult.OK)
             {
-                Data.Tag = $"I expect this from {tff.Person} by {tff.By}";
+                if (Data?.Tag != null)
+                    Data.Tag = $"I expect this from {tff.Person} by {tff.By}";
                 textBoxTags.DataBindings[0].ReadValue();
             }
         }
 
-        private void flagSelectionControl1_FlagChanged(object sender, Tracker.FlagSelectionControl.FlagChangedEventArgs e)
+        private void FlagSelectionControl1_FlagChanged(object sender, Tracker.FlagSelectionControl.FlagChangedEventArgs e)
         {
             switch (e.FlagValue)
             {
                 case "None":
                     break;
                 case "Idea":
-                    if (!string.IsNullOrEmpty(Data.Tag))
+                    if (!string.IsNullOrEmpty(Data?.Tag))
                     {
                         Data.Tag += $" ";
                     }
-                    Data.Tag = $"Idea";
+                    if (Data?.Tag != null)
+                        Data.Tag = $"Idea";
                     textBoxTags.DataBindings[0].ReadValue();
                     break;
                 case "I_Owe":
-                    ToFromForm tff = new ToFromForm();
-                    tff.To = true;
+                    ToFromForm tff = new()
+                    {
+                        To = true
+                    };
                     if (tff.ShowDialog() == DialogResult.OK)
                     {
-                        Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
+                        if (Data?.Tag != null)
+                            Data.Tag = $"I owe this to {tff.Person} by {tff.By}";
                         textBoxTags.DataBindings[0].ReadValue();
                     }
                     break;
                 case "They_Owe":
-                    ToFromForm tff2 = new ToFromForm();
-                    tff2.To = false;
+                    ToFromForm tff2 = new()
+                    {
+                        To = false
+                    };
                     if (tff2.ShowDialog() == DialogResult.OK)
                     {
-                        Data.Tag = $"I expect this from {tff2.Person} by {tff2.By}";
+                        if (Data?.Tag != null)
+                            Data.Tag = $"I expect this from {tff2.Person} by {tff2.By}";
                         textBoxTags.DataBindings[0].ReadValue();
                     }
                     break;
@@ -178,7 +197,7 @@ namespace Tracker
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void Button1_Click_1(object sender, EventArgs e)
         {
             Repeat = true;
             DialogResult = DialogResult.OK;

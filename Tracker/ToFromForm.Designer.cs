@@ -83,7 +83,7 @@
             button2.TabIndex = 11;
             button2.Text = "OK";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button2.Click += Button2_Click;
             // 
             // dateTimePicker1
             // 

@@ -33,7 +33,7 @@ namespace Tracker
             dateTimePicker1.Value = DateTime.Now;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
             Person = textBox1.Text;

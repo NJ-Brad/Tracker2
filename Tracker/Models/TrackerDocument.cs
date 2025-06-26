@@ -2,6 +2,6 @@
 {
     public class TrackerDocument
     {
-        public List<TrackedItemModel> Items { get; set; } = new();
+        public List<TrackedItemModel> Items { get; set; } = [];
     }
 }

@@ -10,7 +10,7 @@ namespace Tracker
             InitializeComponent();
         }
 
-        public event EventHandler<FlagChangedEventArgs> FlagChanged;
+        public event EventHandler<FlagChangedEventArgs>? FlagChanged;
 
         protected override void OnCreateControl()
         {
@@ -60,22 +60,15 @@ namespace Tracker
                     flagValue = "None";
                     break;
             }
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("FlagValue"));
+            
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlagValue)));
 
-            if (FlagChanged != null)
-            {
-                FlagChanged(this, new FlagChangedEventArgs(flagValue));
-            }
+            FlagChanged?.Invoke(this, new FlagChangedEventArgs(flagValue));
         }
 
-        public class FlagChangedEventArgs : EventArgs
+        public class FlagChangedEventArgs(string flagValue) : EventArgs
         {
-            public string FlagValue { get; }
-            public FlagChangedEventArgs(string flagValue)
-            {
-                FlagValue = flagValue;
-            }
+            public string FlagValue { get; } = flagValue;
         }
     }
 }

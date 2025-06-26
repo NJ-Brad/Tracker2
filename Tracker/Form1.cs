@@ -29,9 +29,9 @@ namespace Tracker
         }
 
         // https://csharpexamples.com/c-resize-bitmap-example/
-        public Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
+        public static Bitmap ResizeBitmap(Bitmap bmp, int width, int height)
         {
-            Bitmap result = new Bitmap(width, height);
+            Bitmap result = new(width, height);
             using (Graphics g = Graphics.FromImage(result))
             {
                 g.DrawImage(bmp, 0, 0, width, height);
@@ -40,12 +40,12 @@ namespace Tracker
             return result;
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewDocument();
         }
 
-        TrackerDocument doc = new TrackerDocument();
+        TrackerDocument doc = new();
         string documentName = string.Empty;
         private void LoadDocument(string fileName)
         {
@@ -78,7 +78,7 @@ namespace Tracker
 
                 doc.Items.Where(i => i.Team == team).ToList().ForEach(item =>
                 {
-                    ListViewItem lvi = new ListViewItem("", 0);
+                    ListViewItem lvi = new("", 0);
                     lvi.SubItems.Add(item.Meeting ?? "New Meeting");
                     lvi.SubItems.Add(item.Text ?? "");
                     lvi.Tag = item;
@@ -92,12 +92,14 @@ namespace Tracker
             groupedListView1.Columns[2].Width = -2;
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Tracker");
-            ofd.Filter = "Tracker File (*.trk)|*.trk|All Files (*.*)|*.*";
-            ofd.Multiselect = false;
+            OpenFileDialog ofd = new()
+            {
+                InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Tracker"),
+                Filter = "Tracker File (*.trk)|*.trk|All Files (*.*)|*.*",
+                Multiselect = false
+            };
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 LoadDocument(ofd.FileName);
@@ -105,13 +107,13 @@ namespace Tracker
             }
         }
 
-        private void recentFilesManager1_FileClicked(object arg1, Tracker.RecentFilesManager.RecentFilesManagerEventArgs arg2)
+        private void RecentFilesManager1_FileClicked(object arg1, Tracker.RecentFilesManager.RecentFilesManagerEventArgs arg2)
         {
             LoadDocument(arg2.FileName);
             recentFilesManager1.FileOpened(arg2.FileName);
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(documentName))
                 SaveDocumentAs();
@@ -120,9 +122,11 @@ namespace Tracker
         }
         private void SaveDocumentAs()
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Tracker File (*.trk)|*.trk|All Files (*.*)|*.*";
-            sfd.AddExtension = true;
+            SaveFileDialog sfd = new ()
+            {
+                Filter = "Tracker File (*.trk)|*.trk|All Files (*.*)|*.*",
+                AddExtension = true
+            };
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
@@ -132,7 +136,7 @@ namespace Tracker
             }
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveDocumentAs();
         }
@@ -142,11 +146,11 @@ namespace Tracker
         //     //"S125:Simplify object initialization",
         //     "S125",
         //     Justification = "Removing conflict with WindowsBase triggered by WebView2, until resolution is found ")]
-        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        private void PrintToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // https://stackoverflow.com/questions/56538847/how-to-ignore-sonar-rule-to-specific-line-of-code-in-c
             // S is for Sonar
-#pragma warning disable S125
+//#pragma warning disable S125
             // BEGIN-NOSCAN  // this is supposed to work for SonarQube 
             //PrintForm pf = new();
             //pf.Document = doc;
@@ -156,17 +160,15 @@ namespace Tracker
 
             //pf.ShowDialog();
             // END-NOSCAN
-#pragma warning restore S125
+//#pragma warning restore S125
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        string? previousMeeting = "New Meeting";
-
-        private void groupedListView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void GroupedListView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ListViewHitTestInfo hit = groupedListView1.HitTest(e.X, e.Y);
 
@@ -175,9 +177,10 @@ namespace Tracker
 
             if (hit.Item.Tag is TrackedItemModel tim)
             {
-                NoteDetailsForm ndf = new NoteDetailsForm();
-
-                ndf.Data = tim;
+                NoteDetailsForm ndf = new ()
+                {
+                    Data = tim
+                };
 
                 if (ndf.ShowDialog() == DialogResult.OK)
                 {
@@ -186,7 +189,7 @@ namespace Tracker
             }
         }
 
-        private void groupedListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
+        private void GroupedListView1_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
             if (e.Item != null && e.Item.Tag != null && e.Item.Tag is TrackedItemModel trackedItem)
             {
@@ -202,10 +205,8 @@ namespace Tracker
                 }
                 else
                 {
-                    using (Brush brush = new SolidBrush(groupedListView1.BackColor))
-                    {
-                        e.Graphics.FillRectangle(brush, cellBounds);
-                    }
+                    using Brush brush = new SolidBrush(groupedListView1.BackColor);
+                    e.Graphics.FillRectangle(brush, cellBounds);
                     //// Draw the background for an unselected item.
                     //using (LinearGradientBrush brush =
                     //    new LinearGradientBrush(e.Bounds, Color.Orange,
@@ -245,14 +246,15 @@ namespace Tracker
             }
         }
 
-        private void groupedListView1_KeyDown(object sender, KeyEventArgs e)
+        private void GroupedListView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyValue == (int)Keys.Insert)
             {
-                NoteDetailsForm ndf = new NoteDetailsForm();
-
-                ndf.Data = new TrackedItemModel();
-                ndf.CreatingNew = true;
+                NoteDetailsForm ndf = new()
+                {
+                    Data = new TrackedItemModel(),
+                    CreatingNew = true
+                };
                 if (groupedListView1.SelectedItems.Count > 0 && groupedListView1.SelectedItems[0].Tag is TrackedItemModel tim)
                 {
                     ndf.Data.Team = tim.Team; // Copy the team from the selected item
@@ -263,17 +265,20 @@ namespace Tracker
                 {
                     if (ndf.ShowDialog() == DialogResult.OK)
                     {
-                        doc.Items.Add(ndf.Data);
+                        if(ndf.Data != null)
+                            doc.Items.Add(ndf.Data);
                         ShowDocument();
 
-                        string prevTeam = ndf.Data.Team;
-                        string prevMeeting = ndf.Data.Meeting;
+                        string prevTeam = ndf.Data?.Team ?? string.Empty;
+                        string prevMeeting = ndf.Data?.Meeting ?? string.Empty;
 
                         if (ndf.Repeat)
                         {
-                            ndf.Data = new TrackedItemModel();
-                            ndf.Data.Team = prevTeam;
-                            ndf.Data.Meeting = prevMeeting;
+                            ndf.Data = new()
+                            {
+                                Team = prevTeam,
+                                Meeting = prevMeeting
+                            };
                             ndf.CreatingNew = true;
                         }
                     }
