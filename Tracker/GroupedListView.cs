@@ -15,7 +15,7 @@
             base.DrawColumnHeader += DrawListColumnHeader;
             base.MouseDown += ListMouseDown;
 
-            Bitmap bitmap2 = new Bitmap(16, 16);
+            Bitmap bitmap2 = new(16, 16);
             using (Graphics g = Graphics.FromImage(bitmap2))
             {
                 g.FillRectangle(SystemBrushes.Window, new Rectangle(0, 0, 16, 16));
@@ -27,7 +27,7 @@
                 imageList1.Images.Add(bitmap2);
             }
 
-            Bitmap bitmap = new Bitmap(16, 16);
+            Bitmap bitmap = new(16, 16);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.FillRectangle(SystemBrushes.Window, new Rectangle(0, 0, 16, 16));
@@ -40,8 +40,8 @@
             }
         }
 
-        private readonly ListView shadowListView = new ListView();
-        private readonly ImageList imageList1 = new ImageList();
+        private readonly ListView shadowListView = new();
+        private readonly ImageList imageList1 = new ();
 
         new public event DrawListViewItemEventHandler? DrawItem;
         new public event DrawListViewSubItemEventHandler? DrawSubItem;

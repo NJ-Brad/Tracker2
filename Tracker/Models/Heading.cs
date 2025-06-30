@@ -1,14 +1,9 @@
 ﻿namespace Tracker.Models
 {
-    internal class Heading
+    internal class Heading(string title, string? description = null)
     {
-        public Heading(string title, string? description = null)
-        {
-            Title = title;
-            Description = description;
-        }
-        public string Title { get; set; }
-        public string? Description { get; set; }
+        public string Title { get; set; } = title;
+        public string? Description { get; set; } = description;
         public bool IsExpanded { get; set; } = true;
     }
 }

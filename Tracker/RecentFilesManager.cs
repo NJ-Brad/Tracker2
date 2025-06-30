@@ -81,7 +81,7 @@ namespace Tracker
         // variables
         private readonly ToolStripMenuItem _clearMenuItem = new();
         private readonly ToolStripMenuItem _openAllMenuItem = new();
-        private List<FileEntry> fileEntries = new List<FileEntry>();
+        private List<FileEntry> fileEntries = [];
 
         // Methods
         public void FileOpened(string fileName)
@@ -127,8 +127,10 @@ namespace Tracker
             {
                 if (AllFilesClicked != null)
                 {
-                    RecentFilesManagerEventArgs args = new RecentFilesManagerEventArgs();
-                    args.FileNames = fileEntries.Select(e => e.Path).ToArray();
+                    RecentFilesManagerEventArgs args = new()
+                    {
+                        FileNames = [.. fileEntries.Select(e => e.Path)]
+                    };
 
                     AllFilesClicked(this, args);
                 }
@@ -190,13 +192,10 @@ namespace Tracker
 
             newFileItem.Click += (a, b) =>
             {
-                if (FileClicked != null)
-                {
-                    FileClicked(this, new RecentFilesManagerEventArgs(fe.Path));
-                }
+                FileClicked?.Invoke(this, new RecentFilesManagerEventArgs(fe.Path));
             };
-            if (MruMenuItem != null)
-                MruMenuItem.DropDownItems.Add(newFileItem);
+            
+            MruMenuItem?.DropDownItems.Add(newFileItem);
         }
 
 
@@ -208,15 +207,11 @@ namespace Tracker
 
             if (isoStore.FileExists(ConfigFileName))
             {
-                using (IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream(ConfigFileName, FileMode.Open, isoStore))
-                {
-                    using (StreamReader reader = new StreamReader(isoStream))
-                    {
-                        string content = reader.ReadToEnd();
+                using IsolatedStorageFileStream isoStream = new(ConfigFileName, FileMode.Open, isoStore);
+                using StreamReader reader = new(isoStream);
+                string content = reader.ReadToEnd();
 
-                        fileEntries = JsonSerializer.Deserialize<List<FileEntry>>(content) ?? new();
-                    }
-                }
+                fileEntries = JsonSerializer.Deserialize<List<FileEntry>>(content) ?? [];
             }
         }
 
@@ -231,13 +226,9 @@ namespace Tracker
                 isoStore.DeleteFile(ConfigFileName);
             }
 
-            using (IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream(ConfigFileName, FileMode.CreateNew, isoStore))
-            {
-                using (StreamWriter writer = new StreamWriter(isoStream))
-                {
-                    writer.Write(JsonSerializer.Serialize(fileEntries));
-                }
-            }
+            using IsolatedStorageFileStream isoStream = new(ConfigFileName, FileMode.CreateNew, isoStore);
+            using StreamWriter writer = new(isoStream);
+            writer.Write(JsonSerializer.Serialize(fileEntries));
         }
 
         /// <summary>
@@ -277,7 +268,7 @@ namespace Tracker
             }
 
             public string FileName { get; set; } = "";
-            public string[] FileNames { get; set; } = new string[0];
+            public string[] FileNames { get; set; } = [];
         }
     }
 }

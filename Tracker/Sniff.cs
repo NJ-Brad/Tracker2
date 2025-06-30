@@ -18,7 +18,7 @@
 
     public class Cart
     {
-        public decimal CalculateTotal(Book book, DiscountType discountType, bool applyDiscount)
+        public static decimal CalculateTotal(Book book, DiscountType discountType, bool applyDiscount)
         {
             decimal discountAmount = 0;
 

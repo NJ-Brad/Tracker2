@@ -139,7 +139,7 @@
             buttonMarkComplete.TabIndex = 19;
             buttonMarkComplete.Text = "Mark Complete";
             buttonMarkComplete.UseVisualStyleBackColor = true;
-            buttonMarkComplete.Click += button1_Click;
+            buttonMarkComplete.Click += Button1_Click;
             // 
             // button2
             // 
@@ -150,7 +150,7 @@
             button2.TabIndex = 20;
             button2.Text = "OK";
             button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button2.Click += Button2_Click;
             // 
             // button3
             // 
@@ -161,7 +161,7 @@
             button3.TabIndex = 21;
             button3.Text = "Cancel";
             button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            button3.Click += Button3_Click;
             // 
             // linkLabel1
             // 
@@ -174,7 +174,7 @@
             linkLabel1.TabStop = true;
             linkLabel1.Text = "Idea";
             linkLabel1.Visible = false;
-            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
+            linkLabel1.LinkClicked += LinkLabel1_LinkClicked;
             // 
             // linkLabel2
             // 
@@ -187,7 +187,7 @@
             linkLabel2.TabStop = true;
             linkLabel2.Text = "I Owe";
             linkLabel2.Visible = false;
-            linkLabel2.LinkClicked += linkLabel2_LinkClicked;
+            linkLabel2.LinkClicked += LinkLabel2_LinkClicked;
             // 
             // linkLabel3
             // 
@@ -200,7 +200,7 @@
             linkLabel3.TabStop = true;
             linkLabel3.Text = "I Expect";
             linkLabel3.Visible = false;
-            linkLabel3.LinkClicked += linkLabel3_LinkClicked;
+            linkLabel3.LinkClicked += LinkLabel3_LinkClicked;
             // 
             // textBoxTeam
             // 
@@ -294,7 +294,7 @@
             flagSelectionControl1.Name = "flagSelectionControl1";
             flagSelectionControl1.Size = new Size(467, 45);
             flagSelectionControl1.TabIndex = 27;
-            flagSelectionControl1.FlagChanged += flagSelectionControl1_FlagChanged;
+            flagSelectionControl1.FlagChanged += FlagSelectionControl1_FlagChanged;
             // 
             // button1
             // 
@@ -305,7 +305,7 @@
             button1.TabIndex = 28;
             button1.Text = "Save && New";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click_1;
+            button1.Click += Button1_Click_1;
             // 
             // NoteDetailsForm
             // 
