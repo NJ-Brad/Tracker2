@@ -57,19 +57,27 @@
 
         private void RefreshItems()
         {
-            Items.Clear();
-            foreach (ListViewGroup group in shadowListView.Groups)
+            this.BeginUpdate();
+            try
             {
-                Items.Add(group.Header).Tag = group;
-                if (group.CollapsedState != ListViewGroupCollapsedState.Collapsed)
+                Items.Clear();
+                foreach (ListViewGroup group in shadowListView.Groups)
                 {
-                    // Default or Expanced
-                    foreach (ListViewItem lvi in group.Items)
+                    Items.Add(group.Header).Tag = group;
+                    if (group.CollapsedState != ListViewGroupCollapsedState.Collapsed)
                     {
-                        Items.Add(lvi);
+                        // Default or Expanced
+                        foreach (ListViewItem lvi in group.Items)
+                        {
+                            Items.Add(lvi);
+                        }
                     }
+                    // add a footer item for the group (Future enhancement)
                 }
-                // add a footer item for the group (Future enhancement)
+            }
+            finally
+            {
+                this.EndUpdate();
             }
         }
 
