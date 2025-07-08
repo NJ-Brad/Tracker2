@@ -14,7 +14,7 @@ namespace Tracker
     {
         // Properties
         ToolStripMenuItem? mruMenuItem = null;
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public ToolStripMenuItem? MruMenuItem
         {
             get { return mruMenuItem; }
@@ -194,7 +194,7 @@ namespace Tracker
             {
                 FileClicked?.Invoke(this, new RecentFilesManagerEventArgs(fe.Path));
             };
-            
+
             MruMenuItem?.DropDownItems.Add(newFileItem);
         }
 
